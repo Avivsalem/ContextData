@@ -4,6 +4,7 @@ pkg_name = 'contextdata'
 
 setup(name=pkg_name,
       version='0.1',
+      description="a package to manage contextual data across your program, and output it to logs",
       author='Aviv Salem',
       author_email='avivsalem@gmail.com',
       url='https://github.com/Avivsalem/ContextData',
