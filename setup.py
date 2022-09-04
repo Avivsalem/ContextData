@@ -4,12 +4,14 @@ from pathlib import Path
 pkg_name = 'contextdata'
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
+license_text = (this_directory/"LICENSE").read_text()
 
 setup(name=pkg_name,
       version='0.1.4',
       description="a package to manage contextual data across your program, and output it to logs",
       long_description=long_description,
       long_description_content_type='text/markdown',
+      license=license_text,
       author='Aviv Salem',
       author_email='avivsalem@gmail.com',
       url='https://github.com/Avivsalem/ContextData',
