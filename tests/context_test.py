@@ -55,11 +55,56 @@ def test_asyncio():
             await asyncio.wait([task1, task2])
             org_val, new_val = task1.result()
             assert org_val == 'old_val'
-            assert new_val == f'new_val - 1'
+            assert new_val == 'new_val - 1'
             org_val, new_val = task2.result()
             assert org_val == 'old_val'
-            assert new_val == f'new_val - 2'
+            assert new_val == 'new_val - 2'
 
             assert asyncio_context.get(test_key) == 'old_val'
 
     asyncio.run(run_test())
+
+
+def test_context_id():
+    context_ids = set()
+    with global_context.start_context(value=1):
+        context_id1 = global_context.context_id
+        parent_id1 = global_context.parent_context_id
+        root_id1 = global_context.root_context_id
+        context_ids.add(context_id1)
+
+        assert parent_id1 is None
+        assert root_id1 == context_id1
+
+        with global_context.start_context(value=2):
+            context_id2 = global_context.context_id
+            parent_id2 = global_context.parent_context_id
+            root_id2 = global_context.root_context_id
+
+            assert context_id2 not in context_ids
+            context_ids.add(context_id2)
+
+            assert parent_id2 == context_id1
+            assert root_id2 == root_id1
+
+            with global_context.start_context(value=3):
+                context_id3 = global_context.context_id
+                parent_id3 = global_context.parent_context_id
+                root_id3 = global_context.root_context_id
+
+                assert context_id3 not in context_ids
+                context_ids.add(context_id3)
+
+                assert parent_id3 == context_id2
+                assert root_id3 == root_id1
+
+        with global_context.start_context(value=4):
+            context_id4 = global_context.context_id
+            parent_id4 = global_context.parent_context_id
+            root_id4 = global_context.root_context_id
+
+            assert context_id4 not in context_ids
+            context_ids.add(context_id4)
+
+            assert parent_id4 == context_id1
+            assert root_id4 == root_id1
