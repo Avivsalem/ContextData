@@ -1,1 +1,4 @@
+global-include py.typed
 include README.md
+include VERSION
+include LICENSE
