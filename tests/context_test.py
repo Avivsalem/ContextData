@@ -2,6 +2,7 @@ import asyncio
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from time import sleep
+from typing import Set
 
 from contextdata import global_context, thread_local_context, asyncio_context
 
@@ -66,11 +67,17 @@ def test_asyncio():
 
 
 def test_context_id():
-    context_ids = set()
+    context_ids: Set[str] = set()
+    assert global_context.context_id is None
+    assert global_context.parent_context_id is None
+    assert global_context.root_context_id is None
+
     with global_context.start_context(value=1):
         context_id1 = global_context.context_id
         parent_id1 = global_context.parent_context_id
         root_id1 = global_context.root_context_id
+
+        assert context_id1 is not None
         context_ids.add(context_id1)
 
         assert parent_id1 is None
